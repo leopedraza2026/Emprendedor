@@ -63,9 +63,12 @@
         .btn-green { background-color: var(--accent-green); color: white; }
         .btn-blue { background-color: var(--primary-blue); color: white; }
         .btn-red { background-color: #e74c3c; color: white; }
+        
+        /* Estilos para botones pequeños del panel */
         .btn-sm { padding: 8px 15px; font-size: 0.75rem; border-radius: 15px; width: 100%; margin-top: 5px; }
+        .btn-action-save { background-color: var(--accent-green) !important; } /* Clase auxiliar para estado guardado */
 
-        /* --- SISTEMA DE TOAST NOTIFICATIONS (Sustituto de Alert) --- */
+        /* --- SISTEMA DE TOAST NOTIFICATIONS --- */
         #toast-container {
             position: fixed;
             bottom: 20px;
@@ -204,29 +207,9 @@
         .card-actions { margin-top: auto; display: flex; gap: 10px; }
         .card-actions button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; }
 
-        /* Loading Overlay */
-        .loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.8); z-index: 3000;
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s;
-        }
-        .loading-overlay.active { opacity: 1; pointer-events: all; }
-        .spinner {
-            width: 50px; height: 50px; border: 5px solid #eee;
-            border-top-color: var(--primary-blue); border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
     </style>
 </head>
 <body>
-
-    <!-- Overlay de carga (opcional, para guardar muy pesado) -->
-    <div class="loading-overlay" id="loading-overlay">
-        <div class="spinner"></div>
-    </div>
 
     <!-- Contenedor de Notificaciones -->
     <div id="toast-container"></div>
@@ -421,6 +404,7 @@
                             </div>
                         </div>
 
+                        <!-- BOTÓN INTELIGENTE DE TIENDA -->
                         <button id="btn-save-store" class="btn btn-blue btn-sm" style="width:100%; margin-top:15px;" onclick="saveStoreConfig()">Guardar Datos de Tienda</button>
                     </div>
 
@@ -496,6 +480,7 @@
                             <img id="prod-img-preview" class="product-preview-img" alt="Vista previa producto">
                         </div>
                         
+                        <!-- BOTÓN INTELIGENTE DE PUBLICAR -->
                         <button id="btn-add-product" class="btn btn-blue" style="width:100%" onclick="addProduct()">Publicar en Mi Mini Tienda</button>
                     </div>
                 </div>
@@ -558,7 +543,6 @@
             
             container.appendChild(toast);
 
-            // Eliminar después de 3 segundos
             setTimeout(() => {
                 toast.style.animation = 'fadeOut 0.4s ease forwards';
                 toast.addEventListener('animationend', () => {
@@ -766,7 +750,6 @@
             });
         }
 
-        // NUEVA FUNCIÓN: Actualizar Precio y Stock
         function updateProduct(id) {
             const prod = products.find(p => p.id === id);
             if(prod) {
@@ -787,26 +770,35 @@
             const phone = document.getElementById('profile-phone').value;
             if(phone.length < 7) return showToast("Teléfono inválido", 'error');
             
-            // Feedback visual en botón
             const btn = document.getElementById('btn-save-profile');
             const originalText = btn.innerText;
             btn.innerText = "Guardando...";
             
             setTimeout(() => {
+                // ACTUALIZACIÓN CRÍTICA AQUÍ: Forzar reescritura correcta en el array
                 users = users.map(u => {
                     if(u.user === currentUser.user) {
                         u.fullname = name;
                         u.phone = phone;
+                        return u; 
                     }
                     return u;
                 });
+                
+                // Sincronizar objeto de sesión actual también
                 currentUser.fullname = name;
                 currentUser.phone = phone;
+                
                 saveData();
-                btn.innerText = "¡Guardado!";
-                setTimeout(() => btn.innerText = originalText, 2000);
+                btn.innerText = "Guardado √";
+                btn.classList.add('btn-action-save');
                 showToast("Perfil actualizado");
-            }, 300); // Simulación ligera para feedback visual
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('btn-action-save');
+                }, 2000);
+            }, 300);
         }
 
         function previewStoreLogo(e) {
@@ -842,30 +834,39 @@
             const dept = document.getElementById('store-dept-input').value;
             if(!name) return showToast("Ponle un nombre a tu tienda", 'error');
             
-            // Feedback visual
             const btn = document.getElementById('btn-save-store');
             const originalText = btn.innerText;
             btn.innerText = "Guardando...";
 
             setTimeout(() => {
+                // ACTUALIZACIÓN CRÍTICA AQUÍ: Guardar en array Y en sesión
                 users = users.map(u => {
                     if(u.user === currentUser.user) {
                         u.storeName = name;
                         u.storeDept = dept;
                         if(tempStoreLogo) u.storeLogo = tempStoreLogo;
                         if(tempStoreCover) u.storeCover = tempStoreCover;
+                        return u;
                     }
                     return u;
                 });
+
+                // Sincronizar sesión actual para que NO se pierda al navegar
                 currentUser.storeName = name;
                 currentUser.storeDept = dept;
                 if(tempStoreLogo) currentUser.storeLogo = tempStoreLogo;
                 if(tempStoreCover) currentUser.storeCover = tempStoreCover;
                 
                 saveData();
-                btn.innerText = "¡Configurado!";
-                setTimeout(() => btn.innerText = originalText, 2000);
+                
+                btn.innerText = "Guardado √";
+                btn.classList.add('btn-action-save');
                 showToast("¡Mini Tienda configurada!");
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('btn-action-save');
+                }, 2000);
             }, 300);
         }
 
@@ -892,7 +893,6 @@
             
             if(!name || !price) return showToast("Faltan datos obligatorios", 'error');
 
-            // Feedback visual
             const btn = document.getElementById('btn-add-product');
             const originalText = btn.innerText;
             btn.innerText = "Publicando...";
@@ -909,9 +909,8 @@
                 products.unshift(newProd);
                 saveData();
                 
-                showToast("¡Producto publicado con éxito!");
+                showToast("¡Producto guardado!");
                 
-                // Limpiar formulario
                 document.getElementById('prod-name').value = '';
                 document.getElementById('prod-price').value = '';
                 document.getElementById('prod-stock').value = '';
@@ -920,11 +919,17 @@
                 document.getElementById('prod-img-preview').style.display = 'none';
                 tempProdImg = null;
                 
-                btn.innerText = originalText;
+                btn.innerText = "Guardado √";
+                btn.classList.add('btn-action-save');
                 
-                // Actualizar la lista de inventario inmediatamente sin recargar
+                // Refrescar lista inmediatamente
                 renderMyProducts();
-            }, 500); // Pequeña pausa para que el usuario vea el cambio de estado
+
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('btn-action-save');
+                }, 2000);
+            }, 500);
         }
 
         function deleteProduct(id) {
