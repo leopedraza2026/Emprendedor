@@ -63,7 +63,47 @@
         .btn-green { background-color: var(--accent-green); color: white; }
         .btn-blue { background-color: var(--primary-blue); color: white; }
         .btn-red { background-color: #e74c3c; color: white; }
-        .btn-sm { padding: 6px 12px; font-size: 0.75rem; border-radius: 15px; width: 100%; margin-top: 5px; }
+        .btn-sm { padding: 8px 15px; font-size: 0.75rem; border-radius: 15px; width: 100%; margin-top: 5px; }
+
+        /* --- SISTEMA DE TOAST NOTIFICATIONS (Sustituto de Alert) --- */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: rgba(10, 25, 47, 0.95);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideUpFade 0.4s ease forwards;
+            min-width: 300px;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .toast.success { border-left: 5px solid var(--accent-green); }
+        .toast.error { border-left: 5px solid var(--accent-orange); }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateY(-20px); }
+        }
 
         /* --- HEADER & NAVEGACIÓN RESPONSIVE --- */
         header { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
@@ -76,181 +116,48 @@
         .nav-item { cursor: pointer; font-weight: 500; color: var(--primary-blue); font-size: 0.95rem; }
         .nav-item:hover { color: var(--accent-orange); }
 
-        /* --- BOTÓN HAMBURGUESA --- */
-        .hamburger {
-            display: none; /* Oculto en PC por defecto */
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 10px;
-        }
-        .hamburger svg {
-            width: 30px;
-            height: 30px;
-            stroke: var(--primary-blue);
-            stroke-width: 2;
-        }
+        .hamburger { display: none; cursor: pointer; background: none; border: none; padding: 10px; }
+        .hamburger svg { width: 30px; height: 30px; stroke: var(--primary-blue); stroke-width: 2; }
 
-        /* --- MEDIA QUERY PARA MÓVIL --- */
         @media (max-width: 768px) {
-            .hamburger {
-                display: block; /* Mostrar icono en móvil */
-            }
-
+            .hamburger { display: block; }
             .nav-links {
-                display: none; /* Ocultar menú normal */
-                position: absolute;
-                top: 100%; /* Justo debajo del header */
-                left: 0;
-                width: 100%;
-                background-color: white;
-                flex-direction: column;
-                align-items: center;
-                padding: 20px 0;
-                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-                gap: 20px;
-                z-index: 999;
+                display: none; position: absolute; top: 100%; left: 0; width: 100%;
+                background-color: white; flex-direction: column; align-items: center; padding: 20px 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1); gap: 20px; z-index: 999;
                 animation: slideDown 0.3s ease;
             }
-
-            /* Clase activa para mostrar el menú */
-            .nav-links.active {
-                display: flex;
-            }
+            .nav-links.active { display: flex; }
         }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- VISTA HOME --- */
-        #view-home {
-            padding: 0 !important; 
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-image: url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2058');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        #view-home::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(10,25,47,0.9) 0%, rgba(10,25,47,0.7) 100%);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            max-width: 900px;
-            padding: 50px 30px;
-            background: rgba(255, 255, 255, 0.08); 
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            color: var(--white);
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 2.5rem;
-            font-weight: 300;
-            line-height: 1.6;
-        }
-
-        .trust-badges {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-        .badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent-gold);
-            font-size: 0.85rem;
-            font-weight: 500;
-            background: rgba(0,0,0,0.4);
-            padding: 8px 18px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,215,0,0.2);
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+        #view-home { padding: 0 !important; min-height: 90vh; display: flex; align-items: center; justify-content: center; background-image: url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2058'); background-size: cover; background-position: center; position: relative; }
+        #view-home::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(10,25,47,0.9) 0%, rgba(10,25,47,0.7) 100%); }
+        
+        .hero-content { position: relative; z-index: 2; text-align: center; max-width: 900px; padding: 50px 30px; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .hero-title { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--white); margin-bottom: 1.5rem; line-height: 1.1; }
+        .hero-subtitle { font-size: 1.2rem; color: rgba(255,255,255,0.9); margin-bottom: 2.5rem; font-weight: 300; line-height: 1.6; }
+        
+        .trust-badges { display: flex; justify-content: center; gap: 15px; margin-bottom: 3rem; flex-wrap: wrap; }
+        .badge { display: flex; align-items: center; gap: 8px; color: var(--accent-gold); font-size: 0.85rem; font-weight: 500; background: rgba(0,0,0,0.4); padding: 8px 18px; border-radius: 30px; border: 1px solid rgba(255,215,0,0.2); }
+        .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
 
         /* --- VISTA MINI TIENDAS (LISTADO) --- */
-        .stores-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 2rem;
-        }
-        
-        .store-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: 0.3s;
-            position: relative;
-            text-align: center;
-            padding-bottom: 20px;
-        }
+        .stores-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-top: 2rem; }
+        .store-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: 0.3s; position: relative; text-align: center; padding-bottom: 20px; }
         .store-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
-        
         .store-cover { width: 100%; height: 150px; object-fit: cover; display: block; }
-        
-        .store-logo-container {
-            width: 80px;
-            height: 80px;
-            margin: -40px auto 10px; 
-            position: relative;
-            z-index: 2;
-            border-radius: 50%;
-            border: 4px solid white;
-            overflow: hidden;
-            background: #eee;
-        }
+        .store-logo-container { width: 80px; height: 80px; margin: -40px auto 10px; position: relative; z-index: 2; border-radius: 50%; border: 4px solid white; overflow: hidden; background: #eee; }
         .store-logo { width: 100%; height: 100%; object-fit: cover; }
-        
         .store-info { padding: 0 20px; }
         .store-name { font-size: 1.3rem; font-weight: 800; color: var(--primary-blue); margin-bottom: 5px; }
         .store-seller { color: var(--text-light); font-size: 0.9rem; margin-bottom: 5px; }
         .store-loc { display: inline-block; background: #eee; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; color: #555; margin-bottom: 15px; }
 
         /* --- OTRAS VISTAS --- */
-        .view-section { 
-            padding: 4rem 0; 
-            min-height: 80vh; 
-            animation: snapIn 0.2s ease forwards;
-        }
-        
-        @keyframes snapIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        .view-section { padding: 4rem 0; min-height: 80vh; animation: snapIn 0.2s ease forwards; }
+        @keyframes snapIn { from { opacity: 0; } to { opacity: 1; } }
         
         .login-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: var(--shadow); max-width: 450px; margin: 0 auto; text-align: center; }
         .form-group { margin-bottom: 1.5rem; text-align: left; }
@@ -258,15 +165,7 @@
         .form-control { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 1rem; transition: 0.3s; }
         .form-control:focus { border-color: var(--primary-blue); outline: none; }
 
-        /* Inputs pequeños para la tabla de inventario */
-        .table-input { 
-            width: 60px; 
-            padding: 4px; 
-            border: 1px solid #ddd; 
-            border-radius: 4px; 
-            font-size: 0.85rem; 
-            text-align: center;
-        }
+        .table-input { width: 60px; padding: 4px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.85rem; text-align: center; }
 
         /* Vendedor Dashboard */
         .seller-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
@@ -283,11 +182,10 @@
         .file-upload-btn { border: 2px dashed #ccc; color: #555; background: #f9f9f9; padding: 20px; border-radius: 8px; width: 100%; text-align: center; cursor: pointer; transition: 0.2s; }
         .file-upload-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
         
-        .preview-box { width: 100%; margin-top: 10px; border-radius: 8px; overflow: hidden; display: none; border: 1px solid #eee; }
-        .preview-box img { width: 100%; display: block; }
+        .preview-box { width: 100%; margin-top: 10px; border-radius: 8px; overflow: hidden; display: none; border: 1px solid #eee; text-align: center; }
+        .preview-box img { max-width: 100%; display: block; margin: 0 auto; }
         .preview-cover { height: 100px; object-fit: cover; }
-        .preview-logo { height: 100px; object-fit: cover; border-radius: 50%; width: 100px; margin: 0 auto; }
-
+        .preview-logo { height: 100px; object-fit: cover; border-radius: 50%; width: 100px; }
         .product-preview-img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-top: 15px; display: none; border: 1px solid #eee; }
 
         /* Catalog View */
@@ -306,9 +204,32 @@
         .card-actions { margin-top: auto; display: flex; gap: 10px; }
         .card-actions button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; }
 
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8); z-index: 3000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .loading-overlay.active { opacity: 1; pointer-events: all; }
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid #eee;
+            border-top-color: var(--primary-blue); border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
+
+    <!-- Overlay de carga (opcional, para guardar muy pesado) -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Contenedor de Notificaciones -->
+    <div id="toast-container"></div>
 
     <header>
         <div class="container navbar">
@@ -317,7 +238,6 @@
                 BO <span>Emprendedores</span>
             </div>
 
-            <!-- Botón Hamburguesa (Visible solo en móvil) -->
             <button class="hamburger" onclick="toggleMenu()" aria-label="Menú">
                 <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -446,7 +366,7 @@
                             <label>Número WhatsApp</label>
                             <input type="text" id="profile-phone" class="form-control" placeholder="Ej: 71234567">
                         </div>
-                        <button class="btn btn-orange btn-sm" onclick="saveSellerProfile()">Guardar Perfil</button>
+                        <button id="btn-save-profile" class="btn btn-orange btn-sm" onclick="saveSellerProfile()">Guardar Perfil</button>
                     </div>
 
                     <!-- 2. CONFIGURAR MINI TIENDA -->
@@ -483,7 +403,7 @@
                                     </div>
                                     <input type="file" id="store-logo-input" accept="image/*" onchange="previewStoreLogo(event)">
                                 </div>
-                                <div class="preview-box" id="preview-box-logo" style="text-align:center;">
+                                <div class="preview-box" id="preview-box-logo">
                                     <img src="" class="preview-logo">
                                 </div>
                             </div>
@@ -501,7 +421,7 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-blue btn-sm" style="width:100%; margin-top:15px;" onclick="saveStoreConfig()">Guardar Datos de Tienda</button>
+                        <button id="btn-save-store" class="btn btn-blue btn-sm" style="width:100%; margin-top:15px;" onclick="saveStoreConfig()">Guardar Datos de Tienda</button>
                     </div>
 
                     <!-- 3. AGREGAR PRODUCTO -->
@@ -576,7 +496,7 @@
                             <img id="prod-img-preview" class="product-preview-img" alt="Vista previa producto">
                         </div>
                         
-                        <button class="btn btn-blue" style="width:100%" onclick="addProduct()">Publicar en Mi Mini Tienda</button>
+                        <button id="btn-add-product" class="btn btn-blue" style="width:100%" onclick="addProduct()">Publicar en Mi Mini Tienda</button>
                     </div>
                 </div>
 
@@ -589,7 +509,6 @@
 
                     <div class="seller-card" style="flex-grow:1; padding: 1.5rem; overflow-y: auto; max-height: 500px;">
                         <h4 style="margin-bottom: 15px;">📋 Inventario Actual</h4>
-                        <!-- Aquí se renderiza la lista editable -->
                         <div id="my-products-list"></div>
                     </div>
                 </div>
@@ -627,6 +546,27 @@
     </main>
 
     <script>
+        // --- SISTEMA DE NOTIFICACIONES (TOAST) ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = type === 'success' ? '✅' : '⚠️';
+            
+            toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+            
+            container.appendChild(toast);
+
+            // Eliminar después de 3 segundos
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.4s ease forwards';
+                toast.addEventListener('animationend', () => {
+                    toast.remove();
+                });
+            }, 3000);
+        }
+
         // --- DATOS INICIALES ---
         const defaultUsers = [
             { 
@@ -664,7 +604,6 @@
         // --- FUNCIÓN PARA MENÚ HAMBURGUESA (Responsive) ---
         function toggleMenu() {
             const navLinks = document.getElementById('nav-links-list');
-            // Alternar la clase 'active' para mostrar/ocultar
             navLinks.classList.toggle('active');
         }
 
@@ -692,8 +631,9 @@
                 updateNav();
                 showView('seller'); 
                 if(found.role === 'admin') showView('admin');
+                showToast(`Bienvenido de nuevo, ${found.user}`);
             } else {
-                alert('Datos incorrectos.');
+                showToast('Datos incorrectos', 'error');
             }
         }
 
@@ -702,6 +642,7 @@
             filterSeller = null;
             updateNav();
             showView('home');
+            showToast('Sesión cerrada');
         }
 
         function updateNav() {
@@ -788,13 +729,16 @@
                 document.getElementById('preview-box-cover').style.display = 'block';
             }
 
+            renderMyProducts();
+        }
+
+        function renderMyProducts() {
             const list = document.getElementById('my-products-list');
             list.innerHTML = '';
             const myProds = products.filter(p => p.seller === currentUser.user);
             
             if(myProds.length === 0) list.innerHTML = '<p style="color:#999; text-align:center;">Sin productos.</p>';
             
-            // NUEVO: Renderizar lista con inputs editables
             myProds.forEach(p => {
                 const item = document.createElement('div');
                 item.style.cssText = "display:flex; gap:10px; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:10px; flex-direction:column; background:#fff;";
@@ -829,31 +773,40 @@
                 const newPrice = parseFloat(document.getElementById(`price-${id}`).value);
                 const newStock = parseInt(document.getElementById(`stock-${id}`).value);
 
-                if(isNaN(newPrice) || isNaN(newStock)) return alert("Valores inválidos");
+                if(isNaN(newPrice) || isNaN(newStock)) return showToast("Valores inválidos", 'error');
 
                 prod.price = newPrice;
                 prod.stock = newStock;
                 saveData();
-                alert("Producto actualizado correctamente.");
+                showToast("Producto actualizado correctamente.");
             }
         }
 
         function saveSellerProfile() {
             const name = document.getElementById('profile-fullname').value;
             const phone = document.getElementById('profile-phone').value;
-            if(phone.length < 7) return alert("Teléfono inválido");
+            if(phone.length < 7) return showToast("Teléfono inválido", 'error');
             
-            users = users.map(u => {
-                if(u.user === currentUser.user) {
-                    u.fullname = name;
-                    u.phone = phone;
-                }
-                return u;
-            });
-            currentUser.fullname = name;
-            currentUser.phone = phone;
-            saveData();
-            alert("Perfil actualizado.");
+            // Feedback visual en botón
+            const btn = document.getElementById('btn-save-profile');
+            const originalText = btn.innerText;
+            btn.innerText = "Guardando...";
+            
+            setTimeout(() => {
+                users = users.map(u => {
+                    if(u.user === currentUser.user) {
+                        u.fullname = name;
+                        u.phone = phone;
+                    }
+                    return u;
+                });
+                currentUser.fullname = name;
+                currentUser.phone = phone;
+                saveData();
+                btn.innerText = "¡Guardado!";
+                setTimeout(() => btn.innerText = originalText, 2000);
+                showToast("Perfil actualizado");
+            }, 300); // Simulación ligera para feedback visual
         }
 
         function previewStoreLogo(e) {
@@ -887,24 +840,33 @@
         function saveStoreConfig() {
             const name = document.getElementById('store-name-input').value;
             const dept = document.getElementById('store-dept-input').value;
-            if(!name) return alert("Ponle un nombre a tu tienda.");
+            if(!name) return showToast("Ponle un nombre a tu tienda", 'error');
             
-            users = users.map(u => {
-                if(u.user === currentUser.user) {
-                    u.storeName = name;
-                    u.storeDept = dept;
-                    if(tempStoreLogo) u.storeLogo = tempStoreLogo;
-                    if(tempStoreCover) u.storeCover = tempStoreCover;
-                }
-                return u;
-            });
-            currentUser.storeName = name;
-            currentUser.storeDept = dept;
-            if(tempStoreLogo) currentUser.storeLogo = tempStoreLogo;
-            if(tempStoreCover) currentUser.storeCover = tempStoreCover;
-            
-            saveData();
-            alert("¡Mini Tienda configurada!");
+            // Feedback visual
+            const btn = document.getElementById('btn-save-store');
+            const originalText = btn.innerText;
+            btn.innerText = "Guardando...";
+
+            setTimeout(() => {
+                users = users.map(u => {
+                    if(u.user === currentUser.user) {
+                        u.storeName = name;
+                        u.storeDept = dept;
+                        if(tempStoreLogo) u.storeLogo = tempStoreLogo;
+                        if(tempStoreCover) u.storeCover = tempStoreCover;
+                    }
+                    return u;
+                });
+                currentUser.storeName = name;
+                currentUser.storeDept = dept;
+                if(tempStoreLogo) currentUser.storeLogo = tempStoreLogo;
+                if(tempStoreCover) currentUser.storeCover = tempStoreCover;
+                
+                saveData();
+                btn.innerText = "¡Configurado!";
+                setTimeout(() => btn.innerText = originalText, 2000);
+                showToast("¡Mini Tienda configurada!");
+            }, 300);
         }
 
         function previewProductImage(e) {
@@ -928,32 +890,49 @@
             const dept = document.getElementById('prod-dept').value;
             const desc = document.getElementById('prod-desc').value;
             
-            if(!name || !price) return alert("Faltan datos.");
+            if(!name || !price) return showToast("Faltan datos obligatorios", 'error');
 
-            const newProd = {
-                id: Date.now(),
-                name, category: cat, price: parseFloat(price), stock: parseInt(stock)||1, desc, dept,
-                img: tempProdImg || `https://picsum.photos/seed/${Date.now()}/300/300`,
-                seller: currentUser.user,
-                sellerPhone: currentUser.phone || "61348083"
-            };
-            
-            products.unshift(newProd);
-            saveData();
-            alert("Producto guardado.");
-            
-            document.getElementById('prod-name').value = '';
-            document.getElementById('prod-price').value = '';
-            document.getElementById('prod-img-preview').style.display = 'none';
-            tempProdImg = null;
-            loadSellerPanel();
+            // Feedback visual
+            const btn = document.getElementById('btn-add-product');
+            const originalText = btn.innerText;
+            btn.innerText = "Publicando...";
+
+            setTimeout(() => {
+                const newProd = {
+                    id: Date.now(),
+                    name, category: cat, price: parseFloat(price), stock: parseInt(stock)||1, desc, dept,
+                    img: tempProdImg || `https://picsum.photos/seed/${Date.now()}/300/300`,
+                    seller: currentUser.user,
+                    sellerPhone: currentUser.phone || "61348083"
+                };
+                
+                products.unshift(newProd);
+                saveData();
+                
+                showToast("¡Producto publicado con éxito!");
+                
+                // Limpiar formulario
+                document.getElementById('prod-name').value = '';
+                document.getElementById('prod-price').value = '';
+                document.getElementById('prod-stock').value = '';
+                document.getElementById('prod-desc').value = '';
+                document.getElementById('prod-cat').value = '';
+                document.getElementById('prod-img-preview').style.display = 'none';
+                tempProdImg = null;
+                
+                btn.innerText = originalText;
+                
+                // Actualizar la lista de inventario inmediatamente sin recargar
+                renderMyProducts();
+            }, 500); // Pequeña pausa para que el usuario vea el cambio de estado
         }
 
         function deleteProduct(id) {
-            if(confirm("¿Borrar?")) {
+            if(confirm("¿Seguro que quieres borrar este producto?")) {
                 products = products.filter(p => p.id !== id);
                 saveData();
-                loadSellerPanel();
+                showToast("Producto eliminado");
+                renderMyProducts();
             }
         }
 
@@ -1025,12 +1004,18 @@
         }
         function addUserPrompt() {
             const u=prompt("Usuario:"), p=prompt("Pass:"), ph=prompt("Teléfono:");
-            if(u && p && ph) { users.push({user:u, pass:p, role:'vendedor', phone:ph, storeName:'', storeLogo:'', storeCover:''}); saveData(); renderUsers(); }
+            if(u && p && ph) { users.push({user:u, pass:p, role:'vendedor', phone:ph, storeName:'', storeLogo:'', storeCover:''}); saveData(); renderUsers(); showToast("Vendedor creado"); }
         }
-        function delUser(u) { if(confirm("Borrar?")) { users = users.filter(x=>x.user!==u); saveData(); renderUsers(); } }
+        function delUser(u) { 
+            if(confirm("Borrar?")) { 
+                users = users.filter(x=>x.user!==u); 
+                saveData(); 
+                renderUsers(); 
+                showToast("Usuario eliminado");
+            } 
+        }
 
         showView('home');
     </script>
 </body>
 </html>
-```
